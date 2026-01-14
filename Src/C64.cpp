@@ -793,10 +793,12 @@ void C64::VBlank(bool draw_frame)
 #endif
 }
 
+extern short shiftstate;
+
 /*  Poll joystick port, return CIA mask */
 uint8 C64::poll_joystick(int port)
 {
-	if (SHOWKEY != 1)
+   if (SHOWKEY != 1 && shiftstate != 1)
    {
       uint8 j = 0xff;
       if (input_state_cb(port, RETRO_DEVICE_JOYPAD, 0,
