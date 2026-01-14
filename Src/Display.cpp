@@ -334,13 +334,16 @@ int check_vkey2(int x,int y)
  *  Open window
  */
 
-int init_graphics(void)
+int init_graphics(bool autostart)
 {
 	screen         = (retro_Surface*)malloc( sizeof(retro_Surface*) );
 	screen->pixels = (unsigned char*)malloc(DISPLAY_X *( DISPLAY_Y + 16) );
 	screen->h      = DISPLAY_Y+16;
 	screen->w      = DISPLAY_X ;
 	screen->pitch  = screen->w*1;
+   
+   if (autostart)
+	   kbd_buf_feed((char*)"\rLOAD\"*\",8:\rRUN\r\0");
 	
 	return 1;
 }

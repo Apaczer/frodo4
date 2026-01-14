@@ -43,7 +43,7 @@
 #include "Prefs.h"
 
 /* Forward declarations */
-int init_graphics(void);
+int init_graphics(bool autostart);
 
 extern "C" {
 RFILE* rfopen(const char *path, const char *mode);
@@ -124,8 +124,17 @@ int skel_main(int argc, char **argv)
 	timeval tv;
 	gettimeofday(&tv, NULL);
 	srand(tv.tv_usec);
-
-	if (!init_graphics())
+	
+#ifdef __LIBRETRO__
+	extern char RPATH[512];
+#endif
+	if (!init_graphics(
+#ifdef __LIBRETRO__
+		RPATH[0] != 0 ? true : false)
+#else
+		false)
+#endif
+		)
 		return 0;
 
 	the_app = new Frodo();
