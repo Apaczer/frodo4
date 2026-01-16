@@ -260,6 +260,7 @@ extern bool autoboot;
 
 int shifted_cursor[7] = {0};
 short shiftstate = 0;
+short joystickport = 0;
 
 int Retro_PollEvent(uint8 *key_matrix, uint8 *rev_matrix, uint8 *joystick)
 {
@@ -298,6 +299,21 @@ int Retro_PollEvent(uint8 *key_matrix, uint8 *rev_matrix, uint8 *joystick)
 
 	if ( SHOWKEY != 1 )
 	{
+      //joystick port swap
+      if ( input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_SELECT) && shiftstate == 0 )
+      {
+         mbt[RETRO_DEVICE_ID_JOYPAD_SELECT]++;
+         if ( mbt[RETRO_DEVICE_ID_JOYPAD_SELECT] == 3 )
+         {
+            ThePrefs.swap_joysticks();
+            joystickport = -joystickport;
+         }
+      }
+      else 
+      {
+         mbt[RETRO_DEVICE_ID_JOYPAD_SELECT]=0;
+      }
+
       check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_X, mbt, RETRO_DEVICE_ID_JOYPAD_X, MATRIX(7, 4)); // ENTER
       check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_Y, mbt, RETRO_DEVICE_ID_JOYPAD_Y, MATRIX(0, 1)); // SPACE
       //check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_L, mbt, RETRO_DEVICE_ID_JOYPAD_L, MATRIX(7, 7)); // RUN/STOP
