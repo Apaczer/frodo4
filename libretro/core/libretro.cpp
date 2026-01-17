@@ -5,11 +5,11 @@
 #include "libretro-core.h"
 #include "libretro_core_options.h"
 
+#include "Prefs.h"
 #ifdef NO_LIBCO
 #include "main.h"
 #include "C64.h"
 #include "Display.h"
-#include "Prefs.h"
 #else
 cothread_t mainThread;
 cothread_t emuThread;

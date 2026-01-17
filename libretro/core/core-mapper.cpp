@@ -260,7 +260,7 @@ extern bool autoboot;
 
 int shifted_cursor[7] = {0};
 short shiftstate = 0;
-short joystickport = 0;
+short joystickport = 2;
 
 int Retro_PollEvent(uint8 *key_matrix, uint8 *rev_matrix, uint8 *joystick)
 {

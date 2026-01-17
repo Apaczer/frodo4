@@ -63,7 +63,7 @@ Prefs::Prefs()
 
    SpritesOn          = true;
    SpriteCollisions   = true;
-   JoystickSwap       = false;
+   JoystickSwap       = true;
    LimitSpeed         = true;
    FastReset          = false;
    CIAIRQHack         = false;
