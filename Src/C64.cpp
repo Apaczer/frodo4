@@ -812,7 +812,9 @@ uint8 C64::poll_joystick(int port)
                RETRO_DEVICE_ID_JOYPAD_DOWN))
          j &= 0xfd;
       if (input_state_cb(port, RETRO_DEVICE_JOYPAD, 0,
-               RETRO_DEVICE_ID_JOYPAD_UP))
+               RETRO_DEVICE_ID_JOYPAD_UP) || 
+          input_state_cb(port, RETRO_DEVICE_JOYPAD, 0,
+               RETRO_DEVICE_ID_JOYPAD_B))
          j &= 0xfe;
       if (input_state_cb(port, RETRO_DEVICE_JOYPAD, 0,
                RETRO_DEVICE_ID_JOYPAD_A))
