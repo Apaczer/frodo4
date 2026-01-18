@@ -838,7 +838,7 @@ void C64Display::PollKeyboard(uint8 *key_matrix, uint8 *rev_matrix,
       if(vky > 4)
          vky = 0;
 
-      i=8;
+      i=RETRO_DEVICE_ID_JOYPAD_A;
       if(input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, i)  && vkflag[4]==0) 	
          vkflag[4]=1;
       else if( !input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, i)  && vkflag[4]==1)
@@ -866,8 +866,8 @@ void C64Display::PollKeyboard(uint8 *key_matrix, uint8 *rev_matrix,
          {
             //VKbd show/hide 			
             oldi=-1;
-            Screen_SetFullUpdate(0);
             SHOWKEY=-SHOWKEY;
+            Screen_SetFullUpdate(0);
          }
          else if(i==-5)
          {

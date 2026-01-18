@@ -279,7 +279,12 @@ int Retro_PollEvent(uint8 *key_matrix, uint8 *rev_matrix, uint8 *joystick)
    input_poll_cb();
 
    //RETROKeyboard events
-   if (SHOWKEY == -1 && pauseg == 0)
+   if (SHOWKEY == -1 && MOUSE_EMULATED == -1 && pauseg == 0 &&
+       !input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_UP) &&
+       !input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_DOWN) &&
+       !input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_LEFT) &&
+       !input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_RIGHT) &&
+       !input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_START))
       Process_key(key_matrix,rev_matrix,joystick);
 
    //vkbd toggle
@@ -297,7 +302,7 @@ int Retro_PollEvent(uint8 *key_matrix, uint8 *rev_matrix, uint8 *joystick)
 		mbt[RETRO_DEVICE_ID_JOYPAD_START]=0;
 	}
 
-	if ( SHOWKEY != 1 )
+	if ( SHOWKEY != 1 && MOUSE_EMULATED != 1)
 	{
       //joystick port swap
       if ( input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_SELECT) && shiftstate == 0 )
