@@ -231,6 +231,18 @@ else ifeq ($(platform), wiiu)
    COMMONFLAGS += -ffunction-sections -fdata-sections -D__wiiu__ -D__wut__
    COMMONFLAGS += -DHAVE_SCANDIR=0 -DHAVE_ALPHASORT=0 -DHAVE_SIGACTION 
    STATIC_LINKING = 1
+else ifeq ($(platform), miyoo)
+   TARGET := $(TARGET_NAME)_libretro.so
+   CC = /opt/miyoo/usr/bin/arm-linux-gcc
+   CXX = /opt/miyoo/usr/bin/arm-linux-g++
+   AR = /opt/miyoo/usr/bin/arm-linux-ar
+   #SHARED := -L/opt/miyoo/usr/lib -shared -Wl,--no-undefined
+   SHARED := -shared -nostdlib -Wl,--version-script=link.T
+   fpic := -fPIC -DPIC
+   #CFLAGS += -I/opt/miyoo/usr/include
+   CFLAGS += -fomit-frame-pointer -ffast-math -march=armv5te -mtune=arm926ej-s
+   CXXFLAGS += $(CFLAGS)
+   LDFLAGS += -shared -Wl,--gc-sections -Wl,--version-script=$(CORE_DIR)/libretro/link.T
 else
    CXXFLAGS += -mno-ms-bitfields  -DHAVE_SCANDIR=0 -DHAVE_ALPHASORT=0
    CFLAGS += -mno-ms-bitfields  -DHAVE_SCANDIR=0 -DHAVE_ALPHASORT=0
