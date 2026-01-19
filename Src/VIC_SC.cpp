@@ -40,6 +40,7 @@
 #include "CPUC64.h"
 #include "Display.h"
 #include "Prefs.h"
+#include <cstring>
 
 
 // First and last displayed line
