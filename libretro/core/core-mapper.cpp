@@ -44,6 +44,8 @@ char RPATH[512];
 int NPAGE=-1, KCOL=1, BKGCOLOR=0;
 int SHOWKEY=-1;
 
+extern int KEYBOARD_EMULATED;
+
 int SHIFTON=-1,MOUSE_EMULATED=-1,PAS=4;
 int SND=1; /* SOUND ON/OFF */
 int pauseg=0; // enter_gui
@@ -279,28 +281,27 @@ int Retro_PollEvent(uint8 *key_matrix, uint8 *rev_matrix, uint8 *joystick)
    input_poll_cb();
 
    //RETROKeyboard events
-   if (SHOWKEY == -1 && MOUSE_EMULATED == -1 && pauseg == 0 &&
-       !input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_UP) &&
-       !input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_DOWN) &&
-       !input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_LEFT) &&
-       !input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_RIGHT) &&
+   if ( KEYBOARD_EMULATED!=1 ||
+       SHOWKEY == -1 && MOUSE_EMULATED == -1 && pauseg == 0 &&
        !input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_START))
       Process_key(key_matrix,rev_matrix,joystick);
 
-   //vkbd toggle
-	if ( input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_START) && shiftstate == 0 )
-	{
-		mbt[RETRO_DEVICE_ID_JOYPAD_START]++;
-		if ( mbt[RETRO_DEVICE_ID_JOYPAD_START] == 3 )
-		{
-			SHOWKEY = -SHOWKEY;
-			Screen_SetFullUpdate(0);
-		}
-	}
-	else
-	{
-		mbt[RETRO_DEVICE_ID_JOYPAD_START]=0;
-	}
+   if (KEYBOARD_EMULATED==1) {
+      //vkbd toggle
+      if ( input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_START) && shiftstate == 0 )
+      {
+         mbt[RETRO_DEVICE_ID_JOYPAD_START]++;
+         if ( mbt[RETRO_DEVICE_ID_JOYPAD_START] == 3 )
+         {
+            SHOWKEY = -SHOWKEY;
+            Screen_SetFullUpdate(0);
+         }
+      }
+      else
+      {
+         mbt[RETRO_DEVICE_ID_JOYPAD_START]=0;
+      }
+   }
 
 	if ( SHOWKEY != 1 && MOUSE_EMULATED != 1)
 	{
@@ -319,36 +320,38 @@ int Retro_PollEvent(uint8 *key_matrix, uint8 *rev_matrix, uint8 *joystick)
          mbt[RETRO_DEVICE_ID_JOYPAD_SELECT]=0;
       }
 
-      check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_X, mbt, RETRO_DEVICE_ID_JOYPAD_X, MATRIX(7, 4)); // ENTER
-      check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_Y, mbt, RETRO_DEVICE_ID_JOYPAD_Y, MATRIX(0, 1)); // SPACE
-      //check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_L, mbt, RETRO_DEVICE_ID_JOYPAD_L, MATRIX(7, 7)); // RUN/STOP
+      if (KEYBOARD_EMULATED==1) {
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_X, mbt, RETRO_DEVICE_ID_JOYPAD_X, MATRIX(7, 4)); // ENTER
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_Y, mbt, RETRO_DEVICE_ID_JOYPAD_Y, MATRIX(0, 1)); // SPACE
+         //check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_L, mbt, RETRO_DEVICE_ID_JOYPAD_L, MATRIX(7, 7)); // RUN/STOP
 
-      if ( input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R) )
-      {
-         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_UP, shifted_cursor, 0, MATRIX(0, 7)|0x80);
-         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_DOWN, shifted_cursor, 1, MATRIX(0, 7))
-         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_LEFT, shifted_cursor, 2, MATRIX(0, 2)|0x80)
-         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_RIGHT, shifted_cursor, 3, MATRIX(0, 2));
-         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_A, shifted_cursor, 4, MATRIX(0, 4));
-         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_B, shifted_cursor, 5, MATRIX(0, 5));
-         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_START, shifted_cursor, 6, MATRIX(0, 6));
-         shiftstate = 1;
-      }
-      else if ( shiftstate != 0 )
-      {
-         //yes, this is ugly af, but fast
-         if( shifted_cursor[0] != 0 ) validkey(MATRIX(0, 7)|0x80,1,key_matrix,rev_matrix,joystick);
-         if( shifted_cursor[1] != 0 ) validkey(MATRIX(0, 7),1,key_matrix,rev_matrix,joystick);
-         if( shifted_cursor[2] != 0 ) validkey(MATRIX(0, 2)|0x80,1,key_matrix,rev_matrix,joystick);
-         if( shifted_cursor[3] != 0 ) validkey(MATRIX(0, 2),1,key_matrix,rev_matrix,joystick);
-         if( shifted_cursor[4] != 0 ) validkey(MATRIX(0, 4),1,key_matrix,rev_matrix,joystick);
-         if( shifted_cursor[5] != 0 ) validkey(MATRIX(0, 5),1,key_matrix,rev_matrix,joystick);
-         if( shifted_cursor[6] != 0 ) validkey(MATRIX(0, 6),1,key_matrix,rev_matrix,joystick);
+         if ( input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R) )
+         {
+            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_UP, shifted_cursor, 0, MATRIX(0, 7)|0x80);
+            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_DOWN, shifted_cursor, 1, MATRIX(0, 7))
+            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_LEFT, shifted_cursor, 2, MATRIX(0, 2)|0x80)
+            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_RIGHT, shifted_cursor, 3, MATRIX(0, 2));
+            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_A, shifted_cursor, 4, MATRIX(0, 4));
+            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_B, shifted_cursor, 5, MATRIX(0, 5));
+            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_START, shifted_cursor, 6, MATRIX(0, 6));
+            shiftstate = 1;
+         }
+         else if ( shiftstate != 0 )
+         {
+            //yes, this is ugly af, but fast
+            if( shifted_cursor[0] != 0 ) validkey(MATRIX(0, 7)|0x80,1,key_matrix,rev_matrix,joystick);
+            if( shifted_cursor[1] != 0 ) validkey(MATRIX(0, 7),1,key_matrix,rev_matrix,joystick);
+            if( shifted_cursor[2] != 0 ) validkey(MATRIX(0, 2)|0x80,1,key_matrix,rev_matrix,joystick);
+            if( shifted_cursor[3] != 0 ) validkey(MATRIX(0, 2),1,key_matrix,rev_matrix,joystick);
+            if( shifted_cursor[4] != 0 ) validkey(MATRIX(0, 4),1,key_matrix,rev_matrix,joystick);
+            if( shifted_cursor[5] != 0 ) validkey(MATRIX(0, 5),1,key_matrix,rev_matrix,joystick);
+            if( shifted_cursor[6] != 0 ) validkey(MATRIX(0, 6),1,key_matrix,rev_matrix,joystick);
 
-         shifted_cursor[0]=shifted_cursor[1]=shifted_cursor[2]=shifted_cursor[3]=shifted_cursor[4]=shifted_cursor[5]=shifted_cursor[6]=0;
-         shiftstate = 0;
+            shifted_cursor[0]=shifted_cursor[1]=shifted_cursor[2]=shifted_cursor[3]=shifted_cursor[4]=shifted_cursor[5]=shifted_cursor[6]=0;
+            shiftstate = 0;
+         }
       }
-	}
+   }
 
    
    //mouse/joy toggle

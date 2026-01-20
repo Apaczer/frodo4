@@ -43,6 +43,17 @@ struct retro_core_option_definition option_defs_us[] = {
       },
       "384x288"
    },
+   {
+      "frodo_keyboard",
+      "Keyboard emulation",
+      "Emulate C64 keys from retropad inputs.",
+      {
+         { "disabled", NULL },
+         { "enabled",  NULL },
+         { NULL, NULL },
+      },
+      "enabled",
+   },
    { NULL, NULL, NULL, {{0}}, NULL },
 };
 
