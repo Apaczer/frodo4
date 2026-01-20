@@ -85,6 +85,7 @@ extern int KCOL;
 extern int BKGCOLOR;
 extern int SHIFTON;
 extern int SHOWKEY;
+extern int MOUSE_EMULATED;
 
 /* forward declarations */
 int Retro_PollEvent(uint8 *key_matrix,
@@ -490,13 +491,17 @@ void C64Display::Update(void)
       }
 
       if ( shiftstate == 1 )
-         draw_string(screen, DISPLAY_X + 8, DISPLAY_Y + 4, "R ON", green, fill_gray);
+         draw_string(screen, DISPLAY_X + 8, DISPLAY_Y + 4, "R+", green, fill_gray);
       else
-         draw_string(screen, DISPLAY_X + 8, DISPLAY_Y + 4, "R OFF", black, fill_gray);
+         draw_string(screen, DISPLAY_X + 8, DISPLAY_Y + 4, "R-", black, fill_gray);
       if ( joystickport == 2 )
-         draw_string(screen, DISPLAY_X + (7*8), DISPLAY_Y + 4, "J 2", black, fill_gray);
+         draw_string(screen, DISPLAY_X + (4*8), DISPLAY_Y + 4, "J2", black, shadow_gray);
       else
-         draw_string(screen, DISPLAY_X + (7*8), DISPLAY_Y + 4, "J 1", black, fill_gray);
+         draw_string(screen, DISPLAY_X + (4*8), DISPLAY_Y + 4, "J1", black, fill_gray);
+      if (MOUSE_EMULATED == 1)
+         draw_string(screen, DISPLAY_X + (7*8), DISPLAY_Y + 4, "M+", green, fill_gray);
+      else
+         draw_string(screen, DISPLAY_X + (7*8), DISPLAY_Y + 4, "M-", black, fill_gray);
       draw_string(screen, DISPLAY_X * 1/5 + 8, DISPLAY_Y + 4, "D\x12 8", black, fill_gray);
       draw_string(screen, DISPLAY_X * 2/5 + 8, DISPLAY_Y + 4, "D\x12 9", black, fill_gray);
       draw_string(screen, DISPLAY_X * 3/5 + 8, DISPLAY_Y + 4, "D\x12 10", black, fill_gray);
