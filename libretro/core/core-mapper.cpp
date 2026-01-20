@@ -45,6 +45,7 @@ int NPAGE=-1, KCOL=1, BKGCOLOR=0;
 int SHOWKEY=-1;
 
 extern int KEYBOARD_EMULATED;
+extern int JOYSTICK_EMULATED;
 
 int SHIFTON=-1,MOUSE_EMULATED=-1,PAS=4;
 int SND=1; /* SOUND ON/OFF */
@@ -281,7 +282,7 @@ int Retro_PollEvent(uint8 *key_matrix, uint8 *rev_matrix, uint8 *joystick)
    input_poll_cb();
 
    //RETROKeyboard events
-   if ( KEYBOARD_EMULATED!=1 ||
+   if ( KEYBOARD_EMULATED!=1 || JOYSTICK_EMULATED == -1 &&
        SHOWKEY == -1 && MOUSE_EMULATED == -1 && pauseg == 0 &&
        !input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_START))
       Process_key(key_matrix,rev_matrix,joystick);

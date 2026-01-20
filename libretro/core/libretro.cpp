@@ -21,6 +21,7 @@ int VIRTUAL_WIDTH;
 int retrow=1024; 
 int retroh=1024;
 int KEYBOARD_EMULATED=1;
+int JOYSTICK_EMULATED=1;
 
 #ifdef NO_LIBCO
 extern C64 *TheC64;
@@ -101,6 +102,15 @@ static void update_variables(void)
    {
       if (strcmp(var.value, "enabled")  == 0) KEYBOARD_EMULATED = 1;
       if (strcmp(var.value, "disabled") == 0) KEYBOARD_EMULATED = -1;
+   }
+
+   var.key = "frodo_joystick";
+   var.value = NULL;
+
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      if (strcmp(var.value, "enabled")  == 0) JOYSTICK_EMULATED = 1;
+      if (strcmp(var.value, "disabled") == 0) JOYSTICK_EMULATED = -1;
    }
 }
 

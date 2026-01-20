@@ -54,6 +54,17 @@ struct retro_core_option_definition option_defs_us[] = {
       },
       "enabled",
    },
+   {
+      "frodo_joystick",
+      "Joystick emulation",
+      "Emulate joystick from retropad inputs.",
+      {
+         { "disabled", NULL },
+         { "enabled",  NULL },
+         { NULL, NULL },
+      },
+      "enabled",
+   },
    { NULL, NULL, NULL, {{0}}, NULL },
 };
 

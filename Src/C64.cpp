@@ -69,6 +69,7 @@ extern int pauseg,retro_quit;
 extern void pause_select(void);
 extern int SHOWKEY;
 extern int MOUSE_EMULATED;
+extern int JOYSTICK_EMULATED;
 
 /*
  *  Constructor: Allocate objects and memory
@@ -799,7 +800,7 @@ extern short shiftstate;
 /*  Poll joystick port, return CIA mask */
 uint8 C64::poll_joystick(int port)
 {
-   if (SHOWKEY != 1 && MOUSE_EMULATED != 1 && shiftstate != 1)
+   if (SHOWKEY != 1 && MOUSE_EMULATED != 1 && shiftstate != 1 && JOYSTICK_EMULATED == 1)
    {
       uint8 j = 0xff;
       if (input_state_cb(port, RETRO_DEVICE_JOYPAD, 0,
