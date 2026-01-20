@@ -52,7 +52,11 @@ struct retro_core_option_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
+#ifdef HAVE_KBDCTRL
       "enabled",
+#else
+      "disabled",
+#endif
    },
    {
       "frodo_joystick",
