@@ -19,9 +19,10 @@ make -j$(nproc) -f Makefile.libretro platfrom=<your_target>
 
 |RetroPad button|Normal-Action|
 |---|---|
-|R1|SHIFTED BUTTONS (ON-Hold)|
+| No RetroJoy bind |No hotkey action|
 
 |RetroPad button|KEYBOARD_EMULATED-Action|
+|---|---|
 |X|ENTER c64-key|
 |Y|SPACE c64-key|
 |SELECT|RUN/STOP c64-key|
@@ -38,15 +39,16 @@ make -j$(nproc) -f Makefile.libretro platfrom=<your_target>
 |START|F5 c64-key|
 
 |RetroPad button|JOYSTICK_EMULATED-Action|
+|---|---|
 |A|Joystick fire 1|
 |B|Joystick up|
 |D-Pad|Joystick move control|
 
 |RetroPad button|MOUSE_EMULATED-Action|
+|---|---|
 |A|Left mouse btn|
 |B|Right mouse btn|
 |D-Pad|Mouse move control|
 
-In mouse emulation D-Pad and A/B buttons controls the mouse.
-
-Two joysticks support. Switch automatically between port 1 & 2 with JOYPAD_SELECT btn, or in Control settings port used.
+#### Two joysticks support:  
+Swap joysticks' ports in libretro "Core Options" setting, or in "Port Control" settings select "Mapped Port" 1 or 2 in use.
