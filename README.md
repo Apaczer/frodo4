@@ -19,7 +19,13 @@ make -j$(nproc) -f Makefile.libretro platfrom=<your_target>
 
 |RetroPad button|Normal-Action|
 |---|---|
-|SELECT|Switch Joystick port (1/2)|
+|R1|SHIFTED BUTTONS (ON-Hold)|
+
+|RetroPad button|KEYBOARD_EMULATED-Action|
+|X|ENTER c64-key|
+|Y|SPACE c64-key|
+|SELECT|RUN/STOP c64-key|
+|START|Show virtual Keyboard (Toggle)|
 |R1|SHIFTED BUTTONS (ON-Hold)|
 
 |RetroPad button|KEYBOARD_EMULATED-Shifted-Action|
@@ -27,15 +33,9 @@ make -j$(nproc) -f Makefile.libretro platfrom=<your_target>
 |A|F1 c64-key|
 |B|F3 c64-key|
 |X|C= c64-key|
-|Y|RUN/STOP c64-key|
+|Y|F7 c64-key|
 |D-Pad|Cursors c64-keys|
 |START|F5 c64-key|
-
-|RetroPad button|KEYBOARD_EMULATED-Action|
-|X|ENTER c64-key|
-|Y|SPACE c64-key|
-|START|Show virtual Keyboard (Toggle)|
-|R1|SHIFTED BUTTONS (ON-Hold)|
 
 |RetroPad button|JOYSTICK_EMULATED-Action|
 |A|Joystick fire 1|

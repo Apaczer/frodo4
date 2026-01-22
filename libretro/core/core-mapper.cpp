@@ -303,6 +303,7 @@ int Retro_PollEvent(uint8 *key_matrix, uint8 *rev_matrix, uint8 *joystick)
       if (shiftstate == 0) {
          check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_X, mbt, RETRO_DEVICE_ID_JOYPAD_X, MATRIX(7, 4)); // ENTER
          check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_Y, mbt, RETRO_DEVICE_ID_JOYPAD_Y, MATRIX(0, 1)); // SPACE
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_SELECT, mbt, RETRO_DEVICE_ID_JOYPAD_SELECT, MATRIX(7, 7)); // RUN/STOP
       }
 
       if ( input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R) )
@@ -314,7 +315,7 @@ int Retro_PollEvent(uint8 *key_matrix, uint8 *rev_matrix, uint8 *joystick)
          check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_A, shifted_cursor, 4, MATRIX(0, 4)); //F1
          check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_B, shifted_cursor, 5, MATRIX(0, 5)); //F3
          check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_START, shifted_cursor, 6, MATRIX(0, 6)); //F5
-         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_Y, shifted_cursor, 7, MATRIX(7, 7)); // RUN/STOP
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_Y, shifted_cursor, 7, MATRIX(0,3)); // F7
          check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_X, shifted_cursor, 8, MATRIX(7,5)); // C=
          shiftstate = 1;
       }
