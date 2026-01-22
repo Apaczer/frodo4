@@ -69,6 +69,17 @@ struct retro_core_option_definition option_defs_us[] = {
       },
       "enabled",
    },
+   {
+      "frodo_swapjoy",
+      "Swap Joysticks",
+      "Use 2'nd joystick on port 1",
+      {
+         { "disabled", NULL },
+         { "enabled",  NULL },
+         { NULL, NULL },
+      },
+      "enabled",
+   },
    { NULL, NULL, NULL, {{0}}, NULL },
 };
 

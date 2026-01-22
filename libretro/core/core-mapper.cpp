@@ -263,7 +263,6 @@ extern bool autoboot;
 
 int shifted_cursor[9] = {0};
 short shiftstate = 0;
-short joystickport = 2;
 
 int Retro_PollEvent(uint8 *key_matrix, uint8 *rev_matrix, uint8 *joystick)
 {
@@ -298,58 +297,42 @@ int Retro_PollEvent(uint8 *key_matrix, uint8 *rev_matrix, uint8 *joystick)
       }
    }
 
-	if ( SHOWKEY != 1 && MOUSE_EMULATED != 1)
+	if ( KEYBOARD_EMULATED==1
+      && SHOWKEY != 1 && MOUSE_EMULATED != 1)
 	{
-      //joystick port swap
-      if ( input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_SELECT) && shiftstate == 0 )
-      {
-         mbt[RETRO_DEVICE_ID_JOYPAD_SELECT]++;
-         if ( mbt[RETRO_DEVICE_ID_JOYPAD_SELECT] == 3 )
-         {
-            ThePrefs.swap_joysticks();
-            joystickport = -joystickport;
-         }
-      }
-      else 
-      {
-         mbt[RETRO_DEVICE_ID_JOYPAD_SELECT]=0;
+      if (shiftstate == 0) {
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_X, mbt, RETRO_DEVICE_ID_JOYPAD_X, MATRIX(7, 4)); // ENTER
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_Y, mbt, RETRO_DEVICE_ID_JOYPAD_Y, MATRIX(0, 1)); // SPACE
       }
 
-      if (KEYBOARD_EMULATED==1) {
-         if (shiftstate == 0) {
-            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_X, mbt, RETRO_DEVICE_ID_JOYPAD_X, MATRIX(7, 4)); // ENTER
-            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_Y, mbt, RETRO_DEVICE_ID_JOYPAD_Y, MATRIX(0, 1)); // SPACE
-         }
+      if ( input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R) )
+      {
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_UP, shifted_cursor, 0, MATRIX(0, 7)|0x80);
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_DOWN, shifted_cursor, 1, MATRIX(0, 7))
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_LEFT, shifted_cursor, 2, MATRIX(0, 2)|0x80)
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_RIGHT, shifted_cursor, 3, MATRIX(0, 2));
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_A, shifted_cursor, 4, MATRIX(0, 4)); //F1
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_B, shifted_cursor, 5, MATRIX(0, 5)); //F3
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_START, shifted_cursor, 6, MATRIX(0, 6)); //F5
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_Y, shifted_cursor, 7, MATRIX(7, 7)); // RUN/STOP
+         check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_X, shifted_cursor, 8, MATRIX(7,5)); // C=
+         shiftstate = 1;
+      }
+      else if ( shiftstate != 0 )
+      {
+         //Credits @modulatix
+         if( shifted_cursor[0] != 0 ) validkey(MATRIX(0, 7)|0x80,1,key_matrix,rev_matrix,joystick);
+         if( shifted_cursor[1] != 0 ) validkey(MATRIX(0, 7),1,key_matrix,rev_matrix,joystick);
+         if( shifted_cursor[2] != 0 ) validkey(MATRIX(0, 2)|0x80,1,key_matrix,rev_matrix,joystick);
+         if( shifted_cursor[3] != 0 ) validkey(MATRIX(0, 2),1,key_matrix,rev_matrix,joystick);
+         if( shifted_cursor[4] != 0 ) validkey(MATRIX(0, 4),1,key_matrix,rev_matrix,joystick);
+         if( shifted_cursor[5] != 0 ) validkey(MATRIX(0, 5),1,key_matrix,rev_matrix,joystick);
+         if( shifted_cursor[6] != 0 ) validkey(MATRIX(0, 6),1,key_matrix,rev_matrix,joystick);
+         if( shifted_cursor[7] != 0 ) validkey(MATRIX(0, 7),1,key_matrix,rev_matrix,joystick);
+         if( shifted_cursor[8] != 0 ) validkey(MATRIX(0, 8),1,key_matrix,rev_matrix,joystick);
 
-         if ( input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R) )
-         {
-            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_UP, shifted_cursor, 0, MATRIX(0, 7)|0x80);
-            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_DOWN, shifted_cursor, 1, MATRIX(0, 7))
-            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_LEFT, shifted_cursor, 2, MATRIX(0, 2)|0x80)
-            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_RIGHT, shifted_cursor, 3, MATRIX(0, 2));
-            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_A, shifted_cursor, 4, MATRIX(0, 4)); //F1
-            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_B, shifted_cursor, 5, MATRIX(0, 5)); //F3
-            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_START, shifted_cursor, 6, MATRIX(0, 6)); //F5
-            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_Y, shifted_cursor, 7, MATRIX(7, 7)); // RUN/STOP
-            check_key_with_delay(RETRO_DEVICE_ID_JOYPAD_X, shifted_cursor, 8, MATRIX(7,5)); // C=
-            shiftstate = 1;
-         }
-         else if ( shiftstate != 0 )
-         {
-            //Credits @modulatix
-            if( shifted_cursor[0] != 0 ) validkey(MATRIX(0, 7)|0x80,1,key_matrix,rev_matrix,joystick);
-            if( shifted_cursor[1] != 0 ) validkey(MATRIX(0, 7),1,key_matrix,rev_matrix,joystick);
-            if( shifted_cursor[2] != 0 ) validkey(MATRIX(0, 2)|0x80,1,key_matrix,rev_matrix,joystick);
-            if( shifted_cursor[3] != 0 ) validkey(MATRIX(0, 2),1,key_matrix,rev_matrix,joystick);
-            if( shifted_cursor[4] != 0 ) validkey(MATRIX(0, 4),1,key_matrix,rev_matrix,joystick);
-            if( shifted_cursor[5] != 0 ) validkey(MATRIX(0, 5),1,key_matrix,rev_matrix,joystick);
-            if( shifted_cursor[6] != 0 ) validkey(MATRIX(0, 6),1,key_matrix,rev_matrix,joystick);
-            if( shifted_cursor[7] != 0 ) validkey(MATRIX(0, 7),1,key_matrix,rev_matrix,joystick);
-            if( shifted_cursor[8] != 0 ) validkey(MATRIX(0, 8),1,key_matrix,rev_matrix,joystick);
-
-            shifted_cursor[0]=shifted_cursor[1]=shifted_cursor[2]=shifted_cursor[3]=shifted_cursor[4]=shifted_cursor[5]=shifted_cursor[6]=shifted_cursor[7]=shifted_cursor[8]=0;
-            shiftstate = 0;
-         }
+         shifted_cursor[0]=shifted_cursor[1]=shifted_cursor[2]=shifted_cursor[3]=shifted_cursor[4]=shifted_cursor[5]=shifted_cursor[6]=shifted_cursor[7]=shifted_cursor[8]=0;
+         shiftstate = 0;
       }
    }
 

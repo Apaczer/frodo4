@@ -23,6 +23,8 @@ int retroh=1024;
 int KEYBOARD_EMULATED=1;
 int JOYSTICK_EMULATED=1;
 
+short joystickport = 2;
+
 #ifdef NO_LIBCO
 extern C64 *TheC64;
 extern void quit_frodo_emu(void);
@@ -111,6 +113,20 @@ static void update_variables(void)
    {
       if (strcmp(var.value, "enabled")  == 0) JOYSTICK_EMULATED = 1;
       if (strcmp(var.value, "disabled") == 0) JOYSTICK_EMULATED = -1;
+   }
+
+   var.key = "frodo_swapjoy";
+   var.value = NULL;
+
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      if (strcmp(var.value, "enabled")  == 0) {
+         joystickport = 2;
+         ThePrefs.JoystickSwap = true;
+      } else if (strcmp(var.value, "disabled") == 0) {
+         joystickport = 1;
+         ThePrefs.JoystickSwap = false;
+      }
    }
 }
 
